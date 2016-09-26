@@ -6,9 +6,8 @@ public class Rope : MonoBehaviour {
 
 	#region Public Properties
 
-	public Transform ropeBottom;
+	public Transform ropeTop;
 	public GameObject ropePrefab;
-	public float ropeLength = 5.0f;
 
 	#endregion
 
@@ -16,6 +15,7 @@ public class Rope : MonoBehaviour {
 
 	LinkedList<GameObject> ropeSegments = new LinkedList<GameObject>();
 	Rigidbody rb;
+	float ropeLength;
 	float segmentLength;
 
 	#endregion
@@ -47,11 +47,13 @@ public class Rope : MonoBehaviour {
 	#region Private Methods
 
 	void CreateRope () {
+		ropeLength = Vector3.Distance (ropeTop.position, transform.position);
 		int numberOfSegments = (int)(ropeLength/segmentLength);
 
 		for (int i = 0; i < numberOfSegments; i++) {
 			AddSegment ();
 		}
+		JoinLastSegment ();
 	}
 
 	void AddSegment () {
@@ -63,22 +65,36 @@ public class Rope : MonoBehaviour {
 		}
 
 		Vector3 nextPosition = previousRigidbody.position;
-		nextPosition.y -= segmentLength;
+		nextPosition.y += segmentLength;
 
 		GameObject segment = Instantiate (ropePrefab, transform) as GameObject;
 		segment.transform.position = nextPosition;
 		segment.GetComponent<ConfigurableJoint>().connectedBody = previousRigidbody;
 
 		ropeSegments.AddLast (segment);
+		JoinLastSegment ();
 	}
 
 	void RemoveSegment () {
-		GameObject last = ropeSegments.Last.Value;
+		LinkedListNode<GameObject> last = ropeSegments.Last;
 		if (last == null) {
 			return;
 		}
-		Destroy (last);
+
+		GameObject lastSegment = last.Value;
+		Destroy (lastSegment);
 		ropeSegments.RemoveLast();
+		JoinLastSegment ();
+	}
+
+	void JoinLastSegment () {
+		LinkedListNode<GameObject> last = ropeSegments.Last;
+		if (last == null) {
+			return;
+		}
+
+		Rigidbody lastRigidbody = last.Value.GetComponent<Rigidbody> ();
+		ropeTop.GetComponent<ConfigurableJoint> ().connectedBody = lastRigidbody;
 	}
 
 	#endregion
