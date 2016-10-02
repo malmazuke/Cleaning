@@ -8,6 +8,7 @@ public class Rope : MonoBehaviour {
 
 	public Transform ropeTop;
 	public GameObject ropePrefab;
+	public float ropeChangeSpeed = 3.0f;
 
 	#endregion
 
@@ -40,6 +41,19 @@ public class Rope : MonoBehaviour {
 		} else if (currentLength - segmentLength > ropeLength) {
 			RemoveSegment ();
 		}
+	}
+
+	#endregion
+
+	#region Public Methods
+
+	public void IncreaseRopeLength () {
+		ropeLength += ropeChangeSpeed * Time.deltaTime;
+	}
+
+	public void DecreaseRopeLength () {
+		ropeLength -= ropeChangeSpeed * Time.deltaTime;
+		Debug.Log (ropeLength);
 	}
 
 	#endregion
