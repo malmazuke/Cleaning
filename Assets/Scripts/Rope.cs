@@ -28,12 +28,10 @@ public class Rope : MonoBehaviour {
 		segmentLength = ropePrefab.GetComponent<Renderer> ().bounds.size.y;
 	}
 
-	// Use this for initialization
 	void Start () {
 		CreateRope ();
 	}
-	
-	// Update is called once per frame
+
 	void Update () {
 		float currentLength = ropeSegments.Count * segmentLength;
 		if (currentLength + segmentLength < ropeLength) {
