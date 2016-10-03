@@ -34,7 +34,6 @@ public class StickAim : MonoBehaviour {
         Vector3 handPosition = originalPosition;
 
         if (!(horizontalInput < deadZone && horizontalInput > -deadZone)) {
-            Debug.Log (horizontalInput);
             handPosition.x = horizontalInput * maximumRange;
         }
         if (!(verticalInput < deadZone && verticalInput > -deadZone)) {
