@@ -35,7 +35,6 @@ public class GameController : MonoBehaviour {
         }
 
         timeRemaining -= Time.deltaTime;
-        Debug.Log (timeRemaining);
         UpdateTimeRemainingText ();
 	}
 
